@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Payment;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class PaymentController extends Controller
 {
