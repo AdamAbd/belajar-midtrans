@@ -55,19 +55,19 @@ class PaymentController extends Controller
     public function callback(Request $request)
     {
         $serverKey = config('app.midtrans.server_key');
-
+        
         // 1. Validasi signature key
         $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
         if ($hashed != $request->signature_key) {
             return response()->json(['message' => 'Invalid signature'], 403);
         }
-
+        
         // 2. Cari pembayaran berdasarkan order_id
         $payment = Payment::where('order_id', $request->order_id)->first();
         if (!$payment) {
             return response()->json(['message' => 'Payment not found'], 404);
         }
-
+        
         // 3. Update status pembayaran
         if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
             $payment->status = 'success';
